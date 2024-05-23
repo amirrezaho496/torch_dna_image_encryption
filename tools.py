@@ -26,11 +26,11 @@ def image_entropy(img : torch.Tensor, n):
     return entropy_val.item()
 
 def salt_pepper_noise(image : torch.Tensor, prob : torch.float):
-    output = torch.full_like(image, dtype=torch.uint8)
-    rand = torch.rand_like(image)
+    output = image.clone()
+    rand = torch.rand_like(image.float())
     
-    output[rand < prob] = 0
-    output[rand > (1 - prob)] = 255
+    output[rand < (prob/2)] = 0
+    output[rand > (1 - (prob/2))] = 255
     
     # for i in range(image.shape[0]):
     #     for j in range(image.shape[1]):
@@ -44,9 +44,9 @@ def salt_pepper_noise(image : torch.Tensor, prob : torch.float):
     return output
 
 
-def psnr(original, compressed):
+def psnr(original:torch.Tensor, compressed : torch.Tensor):
     max_pixel = 255
-    mse = torch.mean((original - compressed) ** 2)
+    mse = torch.mean((original.float() - compressed.float()) ** 2)
     if mse == 0:
         return 100
     return 10 * torch.log10((max_pixel**2) / mse)

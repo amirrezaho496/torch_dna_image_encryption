@@ -122,15 +122,9 @@ def hex_str_to_decimal_tensor(hex_str : str, decimal_len : int = 32,  device = '
 
 def create_key_image(m,n,key_decimal : torch.Tensor, device = 'cuda:0'):
     torch.manual_seed(key_decimal.sum()+m+n)
-    # nn_module = nn.Sequential(
-    #     nn.Linear(len(key_decimal), 128),
-    #     nn.Tanh(),
-    #     nn.Linear(128, m*n),
-    #     nn.Sigmoid()
-    # ).to(device=device, dtype=torch.float)
+    torch.rand(key_decimal[:16].sum())
 
-    # vars = nn_module(key_decimal.float())
-    var = torch.rand(n*m, device=device, dtype=torch.float16) 
+    var = torch.floor(torch.rand(n*m, device=device, dtype=torch.float16) * 4)
     
     vars4 = encode_image_into_4_subcells(m,n, var, device=device)
     key = encoded_image_into_dna_sequence(m,n, vars4, key_decimal, 100, device=device)
