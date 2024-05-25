@@ -164,8 +164,8 @@ def main():
     # img = Image.open('imgs/12k.jpg').convert('L')
     # img = Image.open('imgs/8k.jpg').convert('L')
     # img = Image.open('imgs/cat-4k.jpg').convert('L')
-    # img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
-    img = Image.open('imgs/Lena512.bmp').convert('L')
+    img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
+    # img = Image.open('imgs/Lena512.bmp').convert('L')
     
     ## Convert the Image object to a numpy array
     img = np.array(img)

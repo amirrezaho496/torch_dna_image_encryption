@@ -59,7 +59,7 @@ def adjancy_corr_pixel_rand(plain_img : torch.Tensor, enc_img : torch.Tensor):
     m, n = plain_img.shape
     m -= 1
     n -= 1
-    k = min (2000, m*n//10)
+    k = min (5000, m*n//10)
     s = torch.randperm(m*n)[:k]
     x, y = torch.unravel_index(s, (m, n))
     # x = torch.from_numpy(x)

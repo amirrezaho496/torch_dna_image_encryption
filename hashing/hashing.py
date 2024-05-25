@@ -66,7 +66,9 @@ def create_hash_key(hex1 : str|torch.Tensor , hex2 : str|torch.Tensor, meth = SH
     hash_key = ''.join([hash_function(hex1, meth=meth), 
                             hash_image(hex2 , key_str=meth)])
     
-    return hash_function(hash_key, meth=meth)
+    return ''.join([hash_function(hash_key, meth=meth),
+                hash_function(hex2,meth=meth),
+                hash_function(hex1, meth=meth)])
     
 
 
