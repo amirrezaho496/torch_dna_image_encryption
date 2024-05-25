@@ -1,4 +1,3 @@
-from turtle import title
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -23,13 +22,16 @@ def display_images(original_img : torch.Tensor, encrypted_img : torch.Tensor, de
         axs[0, i].set_title(titles[i])
 
     # Display histograms
+    max_y_hist = 0
     for i, img in enumerate(imgs):
         histogram = torch.histogram(img.reshape(-1).float().cpu(), bins=256)
         hist = histogram.hist
+        max_y_hist = max(hist.max().item(), max_y_hist)
         # bins = histogram.bin_edges
-        axs[1, i].bar(range(0,256), hist.flatten().cpu(), color='gray', alpha=0.7)
+        axs[1, i].plot(range(0,256), hist.flatten().cpu())
         axs[1, i].set_title(f'Histogram of {titles[i]}')
-
+        axs[1, i].set_ylim(bottom=0, top = max_y_hist)
+        
     fig.suptitle(subtitle, fontsize=16)
     plt.tight_layout()
     plt.show()
@@ -37,7 +39,7 @@ def display_images(original_img : torch.Tensor, encrypted_img : torch.Tensor, de
 
 def cropping_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
     m,n = img.shape
-    ranges = range(2,7)
+    ranges = [1.5,2,4,8,16]
     enc_croped_imgs = []
     dec_croped_imgs = []
     titles = []
@@ -54,7 +56,7 @@ def cropping_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash,
         psnr = tools.psnr(img,dec_croped_img)
         print(f'PSNR decrypt cropped image 1/{crop_div*crop_div :.2f} : {psnr:.4f} ')
         dec_croped_imgs.append(dec_croped_img)
-        titles.append(f'cropped 1/{crop_div*crop_div :.0f}, PNSR : {psnr:.4f} ')
+        titles.append(f'cropped 1/{crop_div*crop_div :.1f}, PNSR : {psnr:.4f} ')
         pass
     
     fig, axs = plt.subplots(2, len(ranges), figsize=(15, 10))
@@ -75,7 +77,7 @@ def cropping_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash,
 
 def salt_pepper_noise_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
     m,n = img.shape
-    ranges = [1,150,300,600,850]
+    ranges = [660,500,250,125,62]
     enc_nsy_imgs = []
     dec_nsy_imgs = []
     titles = []
@@ -107,6 +109,46 @@ def salt_pepper_noise_attack(img : torch.Tensor, enc_img : torch.Tensor, key, im
     plt.tight_layout()
     plt.show()
     pass
+
+def some_bit_change_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
+    m,n = img.shape
+    ranges = [1,2,4,8,16]
+    enc_nsy_imgs = []
+    dec_nsy_imgs = []
+    titles = []
+    for i in ranges:
+        rands = torch.rand(i, device=device)
+        ms = torch.floor(rands* m).int()
+        ns = torch.floor(rands* n).int()
+        
+        enc_nsy_img = enc_img
+        enc_nsy_img[ms,ns] += 1
+        enc_nsy_imgs.append(enc_nsy_img)
+        
+        dec_nsy_img = decrypt_parallel(enc_nsy_img, key, image_hash, device, chunk_m_step, chunk_n_step)
+        psnr = tools.psnr(img,dec_nsy_img)
+        print(f'PSNR decrypt {i} bit chnage image : {psnr:.4f} ')
+        dec_nsy_imgs.append(dec_nsy_img)
+        titles.append(f'{i} change image, PNSR : {psnr:.4f} ')
+        pass
+    
+    fig, axs = plt.subplots(2, len(ranges), figsize=(15, 10))
+
+    
+    for i, nsy_img in enumerate(enc_nsy_imgs):
+        axs[0, i].imshow(nsy_img.cpu(), cmap='gray')
+        axs[0, i].set_title(f'{ranges[i]} bit change image')
+    for i, dec_nsy_img in enumerate(dec_nsy_imgs):
+        axs[1, i].imshow(dec_nsy_img.cpu(), cmap='gray')
+        axs[1, i].set_title(titles[i])
+       
+    fig.suptitle('Change some bit in encrypted image', fontsize=16) 
+    
+    plt.tight_layout()
+    plt.show()
+    pass
+
+
     
 
 def main():
@@ -122,8 +164,8 @@ def main():
     # img = Image.open('imgs/12k.jpg').convert('L')
     # img = Image.open('imgs/8k.jpg').convert('L')
     # img = Image.open('imgs/cat-4k.jpg').convert('L')
-    img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
-    # img = Image.open('imgs/Lena512.bmp').convert('L')
+    # img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
+    img = Image.open('imgs/Lena512.bmp').convert('L')
     
     ## Convert the Image object to a numpy array
     img = np.array(img)
@@ -223,6 +265,10 @@ def main():
     print("--------------------------------------------------------------")
     print('Salt and pepper noise attack : \n')
     salt_pepper_noise_attack(img,enc_img, key, image_hash, device, chunk_m_step, chunk_n_step)
+
+    print("--------------------------------------------------------------")
+    print('Some bit change attack : \n')
+    some_bit_change_attack(img,enc_img, key, image_hash, device, chunk_m_step, chunk_n_step)
 
     
 

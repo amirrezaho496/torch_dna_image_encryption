@@ -24,7 +24,7 @@ def decrypt_parallel(enc_img : torch.Tensor, key_hex : str,image_hash : str, dev
     dec_img = permutation_columns_rows(enc_img, key_decimal, 'decryption', device)
     # dec_img = permutation_columns(enc_img, key_decimal, 'decryption', device)
     # dec_img = permutation_rows(dec_img, key_decimal, 'decryption', device)
-    # dec_img = permutation_by_gcd(dec_img, key_decimal, 100, 'decryption',  device)
+    dec_img = permutation_by_gcd(dec_img, key_decimal, 'decryption',  device)
 
     
     for chunk_m in range(0, m, chunk_m_step): 
@@ -103,7 +103,7 @@ def encrypt_parallel(img : torch.Tensor, key_hex : str, device = 'cuda:0', chunk
             print(f'enc : encryption :{time() - t0:.4f}')
     
     #perform big permutation
-    # enc_img = permutation_by_gcd(enc_img, key_decimal, 'encryption',  device)
+    enc_img = permutation_by_gcd(enc_img, key_decimal, 'encryption',  device)
     # enc_img = permutation_rows(enc_img, key_decimal, 'encryption', device)
     # enc_img = permutation_columns(enc_img, key_decimal, 'encryption', device)
     enc_img = permutation_columns_rows(enc_img, key_decimal, 'encryption', device)
