@@ -28,7 +28,7 @@ def display_images(original_img : torch.Tensor, encrypted_img : torch.Tensor, de
         hist = histogram.hist
         max_y_hist = max(hist.max().item(), max_y_hist)
         # bins = histogram.bin_edges
-        axs[1, i].plot(range(0,256), hist.flatten().cpu())
+        axs[1, i].bar(range(0,256), hist.flatten().cpu(), color='gray')
         axs[1, i].set_title(f'Histogram of {titles[i]}')
         axs[1, i].set_ylim(bottom=0, top = max_y_hist)
         
@@ -110,39 +110,41 @@ def salt_pepper_noise_attack(img : torch.Tensor, enc_img : torch.Tensor, key, im
     plt.show()
     pass
 
-def some_bit_change_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
+def some_bit_change_test(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
     m,n = img.shape
     ranges = [1,2,4,8,16]
-    enc_nsy_imgs = []
-    dec_nsy_imgs = []
+    img_n_bits = []
+    enc_img_n_bits = []
     titles = []
     for i in ranges:
         rands = torch.rand(i, device=device)
         ms = torch.floor(rands* m).int()
         ns = torch.floor(rands* n).int()
         
-        enc_nsy_img = enc_img
-        enc_nsy_img[ms,ns] += 1
-        enc_nsy_imgs.append(enc_nsy_img)
+        img_n_bit = img
+        img_n_bit[ms,ns] += 1
+        img_n_bits.append(img_n_bit)
         
-        dec_nsy_img = decrypt_parallel(enc_nsy_img, key, image_hash, device, chunk_m_step, chunk_n_step)
-        psnr = tools.psnr(img,dec_nsy_img)
-        print(f'PSNR decrypt {i} bit chnage image : {psnr:.4f} ')
-        dec_nsy_imgs.append(dec_nsy_img)
-        titles.append(f'{i} change image, PNSR : {psnr:.4f} ')
+        enc_img_n_bit, _ = encrypt_parallel(img=img_n_bit, key_hex=key, device=device, chunk_m_step=chunk_m_step, chunk_n_step=chunk_n_step)
+        uaci, npcr = tools.uaci_npcr(enc_img,enc_img_n_bit)
+        print(f'{i} change image, UACI : {uaci:.4f}, NPCR : {npcr:.4f} ')
+        enc_img_n_bits.append(enc_img_n_bit)
+        countble_s = 's' if i > 1 else ''
+        titles.append(f'{i} change{countble_s} in image,\n UACI : {uaci:.4f}, NPCR : {npcr:.4f}')
         pass
     
     fig, axs = plt.subplots(2, len(ranges), figsize=(15, 10))
 
     
-    for i, nsy_img in enumerate(enc_nsy_imgs):
+    for i, nsy_img in enumerate(img_n_bits):
+        countble_s = 's' if ranges[i] > 1 else ''
         axs[0, i].imshow(nsy_img.cpu(), cmap='gray')
-        axs[0, i].set_title(f'{ranges[i]} bit change image')
-    for i, dec_nsy_img in enumerate(dec_nsy_imgs):
+        axs[0, i].set_title(f'{ranges[i]} bit{countble_s} change image')
+    for i, dec_nsy_img in enumerate(enc_img_n_bits):
         axs[1, i].imshow(dec_nsy_img.cpu(), cmap='gray')
         axs[1, i].set_title(titles[i])
        
-    fig.suptitle('Change some bit in encrypted image', fontsize=16) 
+    fig.suptitle('Change some bits in image', fontsize=16) 
     
     plt.tight_layout()
     plt.show()
@@ -164,8 +166,8 @@ def main():
     # img = Image.open('imgs/12k.jpg').convert('L')
     # img = Image.open('imgs/8k.jpg').convert('L')
     # img = Image.open('imgs/cat-4k.jpg').convert('L')
-    img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
-    # img = Image.open('imgs/Lena512.bmp').convert('L')
+    # img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
+    img = Image.open('imgs/Lena512.bmp').convert('L')
     
     ## Convert the Image object to a numpy array
     img = np.array(img)
@@ -268,7 +270,7 @@ def main():
 
     print("--------------------------------------------------------------")
     print('Some bit change attack : \n')
-    some_bit_change_attack(img,enc_img, key, image_hash, device, chunk_m_step, chunk_n_step)
+    some_bit_change_test(img,enc_img, key, image_hash, device, chunk_m_step, chunk_n_step)
 
     
 
