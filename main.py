@@ -154,10 +154,9 @@ def some_bit_change_test(img : torch.Tensor, enc_img : torch.Tensor, key, image_
     
 
 def main():
-    torch.rand(1000)
     # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    device = 'cuda:0'
-    # device = 'cpu'
+    # device = 'cuda:0'
+    device = 'cpu'
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     # Read the image and convert it to grayscale
@@ -216,6 +215,9 @@ def main():
         print(f'Encryption Time = {t1 - enc_time0:.4f}\n')
 
     print("--------------------------------------------------------------")
+    # device = 'cuda:0'
+    # enc_img = enc_img.to(device=device)
+    # img = img.to(device=device)
     
     dec_times = []
     for itr in range(itr_num):    
