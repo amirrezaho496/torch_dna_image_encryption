@@ -126,7 +126,7 @@ def create_key_image(m,n,key_decimal : torch.Tensor, device = 'cuda:0'):
     torch.manual_seed(key_decimal.sum()+m+n)
     torch.rand(key_decimal[:16].sum())
 
-    var = torch.floor(torch.rand(n*m, device=device, dtype=torch.float16) * 4)
+    var = torch.floor(torch.rand(n*m,dtype=torch.float16).to(device) * 4)
     
     vars4 = encode_image_into_4_subcells(m,n, var, device=device)
     key = encoded_image_into_dna_sequence(m,n, vars4, key_decimal, 100, device=device)

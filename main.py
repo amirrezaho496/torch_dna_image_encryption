@@ -117,7 +117,7 @@ def some_bit_change_test(img : torch.Tensor, enc_img : torch.Tensor, key, image_
     enc_img_n_bits = []
     titles = []
     for i in ranges:
-        rands = torch.rand(i, device=device)
+        rands = torch.rand(i).to(device=device)
         ms = torch.floor(rands* m).int()
         ns = torch.floor(rands* n).int()
         
@@ -155,8 +155,8 @@ def some_bit_change_test(img : torch.Tensor, enc_img : torch.Tensor, key, image_
 
 def main():
     # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    # device = 'cuda:0'
-    device = 'cpu'
+    device = 'cuda:0'
+    # device = 'cpu'
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     # Read the image and convert it to grayscale
@@ -192,7 +192,7 @@ def main():
 
     # Add noise to the image
 
-    noise = torch.rand(m, n, device=device) * noise_level * 255
+    noise = torch.rand(m, n).to(device=device) * noise_level * 255
 
     # img = img + noise
 
