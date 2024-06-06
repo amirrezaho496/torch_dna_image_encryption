@@ -203,14 +203,14 @@ def main():
         enc_times.append(t1 - enc_time0)
         print(f'Encryption Time = {t1 - enc_time0:.4f}\n')
 
-    torch.save(enc_img, "encrypt_img.pt")
-    print(f'Encrypted image saved in <encrypt_img.pt>\n')
+    # torch.save(enc_img, "encrypt_img.pt")
+    # print(f'Encrypted image saved in <encrypt_img.pt>\n')
 
     print("--------------------------------------------------------------")
     # device = 'cuda:0'
     # device = 'cpu'
-    enc_img = torch.load("encrypt_img.pt")
-    print(f'Encrypted image loaded from <encrypt_img.pt>\n')
+    # enc_img = torch.load("encrypt_img.pt")
+    # print(f'Encrypted image loaded from <encrypt_img.pt>\n')
 
     enc_img = enc_img.to(device=device)
     img = img.to(device=device)
