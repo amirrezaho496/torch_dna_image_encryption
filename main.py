@@ -163,17 +163,17 @@ def main():
     
     ## Open the image file
     # img = Image.open('imgs/12k.jpg').convert('L')
-    # img = Image.open('imgs/8k.jpg').convert('L')
+    img = Image.open('imgs/8k.jpg').convert('L')
     # img = Image.open('imgs/cat-4k.jpg').convert('L')
     # img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
-    img = Image.open('imgs/Lena512.bmp').convert('L')
+    # img = Image.open('imgs/Lena512.bmp').convert('L')
     
     ## Convert the Image object to a numpy array
     img = np.array(img)
     img = torch.from_numpy(img).to(device)
     
     # For making image of any sizes :
-    # size = 11_000
+    # size = 5_000
     # img = torch.arange(end = size*size, device=device).reshape(size, size)
     # img = img / (size*size)
     # img *= 255
@@ -185,18 +185,7 @@ def main():
 
     # Set the key and crop parameters
     key = '123456789'
-
-    crop = 4
-    noise_level = 0.00
-
-
-    # Add noise to the image
-
-    noise = torch.rand(m, n).to(device=device) * noise_level * 255
-
-    # img = img + noise
-
-    chunk_m_step = 2000
+    chunk_m_step = 3000
     chunk_n_step = 2000
     
     itr_num = 1
@@ -214,10 +203,18 @@ def main():
         enc_times.append(t1 - enc_time0)
         print(f'Encryption Time = {t1 - enc_time0:.4f}\n')
 
+    torch.save(enc_img, "encrypt_img.pt")
+    print(f'Encrypted image saved in <encrypt_img.pt>\n')
+
     print("--------------------------------------------------------------")
     # device = 'cuda:0'
-    # enc_img = enc_img.to(device=device)
-    # img = img.to(device=device)
+    # device = 'cpu'
+    enc_img = torch.load("encrypt_img.pt")
+    print(f'Encrypted image loaded from <encrypt_img.pt>\n')
+
+    enc_img = enc_img.to(device=device)
+    img = img.to(device=device)
+    
     
     dec_times = []
     for itr in range(itr_num):    

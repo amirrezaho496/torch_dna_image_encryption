@@ -10,11 +10,14 @@ from randomness.torch_rand import chaotic_torch_rand
 # # tens = torch.tensor(range(0,100)).reshape(10,10)
 # # tens2 = torch.zeros_like(tens)
 # # tens2[:,perm] = tens[:,perm]
+device = "cuda:0"
+rand1 = chaotic_torch_rand(size=(100,), seed=102, r = 10, device='cuda:0')
 
-rand = chaotic_torch_rand(size=(25,), seed=10, device='cuda:0') 
+device = "cpu"
+rand2 = chaotic_torch_rand(size=(100,), seed=102, r = 10, device='cpu')
 
-
-print(rand)
+print(rand1)
+print(rand2)
 
 
 # tensor([0.7713, 0.0208, 0.6336, 0.7488, 0.4985, 0.7034, 0.0810, 0.9257, 0.7501,

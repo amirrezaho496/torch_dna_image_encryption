@@ -18,12 +18,12 @@ def chaotic_torch_rand(size : Sequence[_int|torch.SymInt], seed = 0, r : torch.u
         count *= dim
 
     # col = int(np.ceil(np.sqrt(count)))
-    dim1 = int(np.ceil(np.log10(count)))
+    dim1 = int(np.ceil(np.log2(count)))
     
     dim2 = count // dim1 + 1
     
     torch.manual_seed(seed)
-    first_rand= torch.rand(dim2, device=device)
+    first_rand= torch.rand(dim2)
     
     x = torch.zeros(size=(dim1,dim2)).to(device=device)
     

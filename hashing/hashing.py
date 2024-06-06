@@ -124,11 +124,8 @@ def hex_str_to_decimal_tensor(hex_str : str, decimal_len : int = 32,  device = '
     return target
 
 def create_key_image(m,n,key_decimal : torch.Tensor, device = 'cuda:0'):
-    torch.manual_seed(key_decimal.sum()+m+n)
-    # torch.rand(key_decimal[:16].sum())
-
     # rands = torch.rand(n*m,dtype=torch.float16).to(device) * 4
-    rands = chaotic_torch_rand((n*m,), seed=key_decimal.sum()+m+n, device=device)
+    rands = chaotic_torch_rand((n*m,), seed=key_decimal.sum()+m+n, device=device) * 4
     var = torch.floor(rands)
     
     vars4 = encode_image_into_4_subcells(m,n, var, device=device)
