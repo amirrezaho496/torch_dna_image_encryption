@@ -196,8 +196,8 @@ def main():
 
     # img = img + noise
 
-    chunk_m_step = 4000
-    chunk_n_step = 4000
+    chunk_m_step = 2000
+    chunk_n_step = 2000
     
     itr_num = 1
     enc_times = []

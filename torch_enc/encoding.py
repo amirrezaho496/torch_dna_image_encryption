@@ -2,6 +2,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from randomness.torch_rand import chaotic_torch_rand
+
 
 def encode_image_into_4_subcells(m: int, n: int, plain_img: torch.Tensor, device = 'cuda:0') -> torch.Tensor:
     """
@@ -46,8 +48,8 @@ def encoded_image_into_dna_sequence(m: int, n: int, I: torch.Tensor, KeyDecimal:
         The encoded DNA sequence
     """
     # Extract the key decimal values
-    d1, d2, d3, d4, d5, d6, d7, d8 = KeyDecimal[0], KeyDecimal[1], KeyDecimal[2], KeyDecimal[3], KeyDecimal[4], KeyDecimal[5], KeyDecimal[6], KeyDecimal[7]
-    d9, d10, d11, d12, d13, d14, d15, d16 = KeyDecimal[8], KeyDecimal[9], KeyDecimal[10], KeyDecimal[11], KeyDecimal[12], KeyDecimal[13], KeyDecimal[14], KeyDecimal[15]
+    d1, d2, d3, d4, d5, d6, d7, d8 = KeyDecimal[0:8]
+    d9, d10, d11, d12, d13, d14, d15, d16 = KeyDecimal[8:16]
 
     # Calculate xx and u
     xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), KeyFeature) / 256
@@ -58,10 +60,12 @@ def encoded_image_into_dna_sequence(m: int, n: int, I: torch.Tensor, KeyDecimal:
 
     # Generate the logistic sequence for the entire image
     len4mn = 4 * n * m
-    torch.manual_seed(x*100 + u *100)
-    torch.cuda.manual_seed(x* 100 + u * 100)
-    logistic_seq = torch.rand((1, len4mn)).to(device=device)
-
+    # torch.manual_seed(x*100 + u *100)
+    # torch.cuda.manual_seed(x* 100 + u * 100)
+    # logistic_seq = torch.rand((1, len4mn)).to(device=device)
+    
+    x = (x * 100).cpu().int().numpy()
+    logistic_seq = chaotic_torch_rand((len4mn,), seed=x, r = xx.cpu(), device=device)
     # Calculate R
     R = torch.floor(8 * logistic_seq).int()
 
@@ -97,22 +101,23 @@ def permutation_dna(image: torch.Tensor, key_decimal: torch.Tensor, key_feature:
         The permuted DNA sequence
     """
 
-    seed = key_decimal[1::2].sum() * step_m + key_decimal[0::2].sum() * step_n + key_feature
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    nn_module = torch.nn.Sequential(
-        nn.Linear(len(key_decimal), 12),
-        nn.Tanh(),
-        nn.Linear(12,2),
-        nn.Sigmoid()
-    ).to(device=device)
+    # Extract the key decimal values
+    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0:8]
+    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8:16]
 
-    x,u = nn_module(key_decimal.float())
-    
+    # Calculate xx and u
+    xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), key_feature) / 256
+    # u = 3.89 + xx * 0.01
+
+    # Calculate x
+    x = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d9, d10), d11), d12), d13), d14), d15), d16), key_feature) / 256
+
     len4mn = 4 * n * m
-    torch.manual_seed(x * 10 + u * 100 + key_feature)
-    torch.cuda.manual_seed(x * 100 +  u * 100 + key_feature)
-    chaotic_signal = torch.rand(len4mn,dtype=torch.float16).to(device=device)
+    # torch.manual_seed(x * 10 + u * 100 + key_feature)
+    # torch.cuda.manual_seed(x * 100 +  u * 100 + key_feature)
+    # chaotic_signal = torch.rand(len4mn,dtype=torch.float16).to(device=device)
+    x = (x * 100 + key_decimal[0:10].sum()).cpu().int().numpy()
+    chaotic_signal = chaotic_torch_rand((len4mn,), seed=x, r = xx,device=device)
 
     
     # # Permute the image
@@ -144,24 +149,23 @@ def diffusion_dna(image: torch.Tensor, key_image: torch.Tensor, key_decimal: tor
     Returns:
         The diffused DNA sequence
     """
-    half = len(key_decimal//2)
-    seed = key_decimal[:half].sum() * step_m + key_decimal[half:].sum() * step_n + key_feature
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    nn_module = torch.nn.Sequential(
-        nn.Linear(len(key_decimal), 16),
-        nn.Tanh(),
-        nn.Linear(16,2),
-        nn.Sigmoid()
-    ).to(device=device, dtype=torch.float)
-    
-    x, u = nn_module(key_decimal.float())
-    
-    # Generate the chaotic signal for the entire image
+    # Extract the key decimal values
+    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0:8]
+    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8:16]
+
+    # Calculate xx and u
+    xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), key_feature) / 256
+    # u = 3.89 + xx * 0.01
+
+    # Calculate x
+    x = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d9, d10), d11), d12), d13), d14), d15), d16), key_feature) / 256
+
     len4mn = 4 * n * m
-    torch.manual_seed(x*step_m + u*step_n )
-    torch.cuda.manual_seed(x*step_m + u * step_n)
-    chaotic_signal = torch.rand((1, len4mn)).to(device=device)
+    # torch.manual_seed(x * 10 + u * 100 + key_feature)
+    # torch.cuda.manual_seed(x * 100 +  u * 100 + key_feature)
+    # chaotic_signal = torch.rand(len4mn,dtype=torch.float16).to(device=device)
+    x = (x * 100).cpu().int().numpy()
+    chaotic_signal = chaotic_torch_rand((len4mn,), seed=x, r = xx,device=device)
 
     # Calculate the operation
     operation = torch.floor(7 * chaotic_signal).int()
@@ -220,14 +224,14 @@ def decoding_dna_image(m: int, n: int, I: torch.Tensor, key_decimal: torch.Tenso
     """
 
     # Extract the key decimal values
-    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0], key_decimal[1], key_decimal[2], key_decimal[3], key_decimal[4], key_decimal[5], key_decimal[6], key_decimal[7]
-    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8], key_decimal[9], key_decimal[10], key_decimal[11], key_decimal[12], key_decimal[13], key_decimal[14], key_decimal[15]
+    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0:8]
+    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8:16]
 
 
     # Calculate xx and u
 
     xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), key_feature) / 256
-    u = 3.89 + xx * 0.01
+    # u = 3.89 + xx * 0.01
 
 
     # Calculate x
@@ -237,9 +241,12 @@ def decoding_dna_image(m: int, n: int, I: torch.Tensor, key_decimal: torch.Tenso
 
     # Generate the logistic sequence for the entire image
     len4mn = 4 * n * m
-    torch.manual_seed(x*100 + u *100)
-    torch.cuda.manual_seed(x*100 +u * 100)
-    logistic_seq = torch.rand((1, len4mn)).to(device=device)
+    # torch.manual_seed(x*100 + u *100)
+    # torch.cuda.manual_seed(x*100 +u * 100)
+    # logistic_seq = torch.rand((1, len4mn)).to(device=device)
+    
+    x = (x * 100).cpu().int().numpy()
+    logistic_seq = chaotic_torch_rand((len4mn,), seed=x, r = xx, device=device)
 
     # Calculate R
     R = torch.floor(8 * logistic_seq).int()
@@ -295,7 +302,8 @@ def permutation_by_gcd(img:torch.Tensor, key_decimal : torch.Tensor, type : str,
     seed //= m+n+100*gcd
     torch.manual_seed(seed)
     groupe_size = int(col_size*row_size)
-    rands = torch.rand(size=(1,groupe_size)).to(device=device)
+    # rands = torch.rand(size=(1,groupe_size)).to(device=device)
+    rands = chaotic_torch_rand(size=(1,groupe_size), seed=seed, r = key_decimal[0] , device=device)
     _, perm = torch.sort(rands)
     
     # gcd_rands = torch.rand(size=(2,gcd), device=device)
@@ -326,8 +334,10 @@ def permutation_rows(img : torch.Tensor, key_decimal : torch.Tensor, type :str, 
         seed = seed.bitwise_xor(i).bitwise_not()
         
     torch.manual_seed(seed)
-        
-    _, perms = torch.rand((1,m)).to(device=device).squeeze().sort()
+
+    rands = chaotic_torch_rand(size=(m,), seed=seed, r = key_decimal[0] , device=device)
+
+    _, perms = rands.squeeze().sort()
     
     if type == 'encryption':
          perm_img = img[perms,:]
@@ -344,8 +354,8 @@ def permutation_columns(img : torch.Tensor, key_decimal : torch.Tensor, type :st
     for i in key_decimal:
         seed = seed.bitwise_xor(i)
         
-    torch.manual_seed(seed)
-    _, perms = torch.rand((1,n)).to(device=device).squeeze().sort()
+    rands = chaotic_torch_rand(size=(n,), seed=seed, r = key_decimal[0] , device=device)
+    _, perms = rands.squeeze().sort()
     
     if type == 'encryption':
          perm_img = img[:,perms]
@@ -362,10 +372,12 @@ def permutation_columns_rows(img : torch.Tensor, key_decimal : torch.Tensor, typ
     seedr = key_decimal[16:].sum() 
         
     torch.manual_seed(seedc)
-    _, perms_c = torch.rand((1,n)).to(device=device).squeeze().sort()
+    randc = chaotic_torch_rand(size=(n,), seed=seedc, r = key_decimal[0] , device=device)
+    _, perms_c = randc.squeeze().sort()
     
     torch.manual_seed(seedr)
-    _, perms_r = torch.rand((1,m)).to(device=device).squeeze().sort()
+    randr = chaotic_torch_rand(size=(m,), seed=seedr, r = key_decimal[0] , device=device)
+    _, perms_r = randr.squeeze().sort()
     
     if type == 'encryption':
          perm_img = img[perms_r,:]#[:,perms_c]

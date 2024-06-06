@@ -59,7 +59,7 @@ def adjancy_corr_pixel_rand(plain_img : torch.Tensor, enc_img : torch.Tensor):
     m, n = plain_img.shape
     m -= 1
     n -= 1
-    k = min (5000, m*n//10)
+    k = min (50000, m*n//10)
     s = torch.randperm(m*n)[:k]
     x, y = torch.unravel_index(s, (m, n))
     # x = torch.from_numpy(x)
@@ -84,18 +84,39 @@ def adjancy_corr_pixel_rand(plain_img : torch.Tensor, enc_img : torch.Tensor):
         [
             [
                 "V",
-                np.corrcoef(plain_img[x, y].cpu(), plain_img[x, y + 1].cpu())[0, 1],
-                np.corrcoef(enc_img[x, y].cpu(), enc_img[x, y + 1].cpu())[0, 1],
+                torch.corrcoef(
+                    torch.cat(
+                        (plain_img[x, y].unsqueeze(0), plain_img[x, y + 1].unsqueeze(0))
+                        ))[0, 1],
+                
+                                torch.corrcoef(
+                    torch.cat(
+                        (enc_img[x, y].unsqueeze(0), enc_img[x, y + 1].unsqueeze(0))
+                        ))[0, 1],
             ],
             [
                 "H",
-                np.corrcoef(plain_img[x, y].cpu(), plain_img[x + 1, y].cpu())[0, 1],
-                np.corrcoef(enc_img[x, y].cpu(), enc_img[x + 1, y].cpu())[0, 1],
+                torch.corrcoef(
+                    torch.cat(
+                        (plain_img[x, y].unsqueeze(0), plain_img[x+1, y].unsqueeze(0))
+                        ))[0, 1],
+                
+                torch.corrcoef(
+                    torch.cat(
+                        (enc_img[x, y].unsqueeze(0), enc_img[x+1, y].unsqueeze(0))
+                        ))[0, 1],
             ],
             [
                 "D",
-                np.corrcoef(plain_img[x, y].cpu(), plain_img[x + 1, y + 1].cpu())[0, 1],
-                np.corrcoef(enc_img[x, y].cpu(), enc_img[x + 1, y + 1].cpu())[0, 1],
+                torch.corrcoef(
+                    torch.cat(
+                        (plain_img[x, y].unsqueeze(0), plain_img[x+1, y + 1].unsqueeze(0))
+                        ))[0, 1],
+                
+                torch.corrcoef(
+                    torch.cat(
+                        (enc_img[x, y].unsqueeze(0), enc_img[x+1, y + 1].unsqueeze(0))
+                        ))[0, 1],
             ],
         ],
         x,

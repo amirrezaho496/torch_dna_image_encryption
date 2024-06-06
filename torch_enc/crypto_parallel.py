@@ -42,7 +42,7 @@ def decrypt_parallel(enc_img : torch.Tensor, key_hex : str,image_hash : str, dev
             key_image = hashing.create_key_image(chunk_m_len, chunk_n_len,
                                                              key_decimal,
                                                              device)
-            print(f'enc : create_key_image :{time() - t0:.4f}')
+            print(f'dec : create_key_image :{time() - t0:.4f}')
             t0 = time()
             dec_img[chunk_m:end_m_chunk, chunk_n:end_n_chunk] = crypto.decryption(dec_img[chunk_m:end_m_chunk, chunk_n:end_n_chunk],
                                                                                   key_image,
