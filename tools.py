@@ -74,11 +74,11 @@ def adjancy_corr_pixel_rand(plain_img : torch.Tensor, enc_img : torch.Tensor):
     enc_pxl_values = [enc_img[x, y + 1], enc_img[x + 1, y], enc_img[x + 1, y + 1]]
     
     for i, vals in enumerate(plain_pxl_values):
-        axs[0, i].scatter(vals.cpu(), plain_xy.cpu())
+        axs[0, i].scatter(vals.cpu(), plain_xy.cpu(), s=1)
         axs[0, i].set_title(titles[i])
         
     for i, vals in enumerate(enc_pxl_values):
-        axs[1, i].scatter(vals.cpu(), plain_xy.cpu())
+        axs[1, i].scatter(vals.cpu(), plain_xy.cpu(), s=1)
         # axs[0, i].set_title(titles[i])
     return (
         [

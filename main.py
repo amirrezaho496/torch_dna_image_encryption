@@ -254,9 +254,9 @@ def main():
     
     cc, x,y = tools.adjancy_corr_pixel_rand(img, enc_img)
     print("corrcoef : ")
-    print(f"Vertical   : plain inage :{cc[0][1]:.4f}, encrypted image : {cc[0][2]:.4f}")
-    print(f"Horizontal : plain inage :{cc[1][1]:.4f}, encrypted image : {cc[1][2]:.4f}")
-    print(f"Diagonal   : plain inage :{cc[2][1]:.4f}, encrypted image : {cc[2][2]:.4f}")
+    print(f"Vertical   : plain image :{cc[0][1]:.4f}, encrypted image : {cc[0][2]:.4f}")
+    print(f"Horizontal : plain image :{cc[1][1]:.4f}, encrypted image : {cc[1][2]:.4f}")
+    print(f"Diagonal   : plain image :{cc[2][1]:.4f}, encrypted image : {cc[2][2]:.4f}")
     print("--------------------------------------------------------------\n")
     display_images(img, enc_img, dec_img)
     

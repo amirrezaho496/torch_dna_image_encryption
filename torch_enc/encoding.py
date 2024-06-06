@@ -33,7 +33,7 @@ def encode_image_into_4_subcells(m: int, n: int, plain_img: torch.Tensor, device
     return I
 
 
-def encoded_image_into_dna_sequence(m: int, n: int, I: torch.Tensor, KeyDecimal: torch.Tensor, KeyFeature: int, device = 'cuda:0') -> torch.Tensor:
+def encoded_image_into_dna_sequence(m: int, n: int, I: torch.Tensor, key_decimal: torch.Tensor, KeyFeature: int, device = 'cuda:0') -> torch.Tensor:
     """
     Encodes the image into a DNA sequence using the given key decimal and feature values.
 
@@ -48,15 +48,18 @@ def encoded_image_into_dna_sequence(m: int, n: int, I: torch.Tensor, KeyDecimal:
         The encoded DNA sequence
     """
     # Extract the key decimal values
-    d1, d2, d3, d4, d5, d6, d7, d8 = KeyDecimal[0:8]
-    d9, d10, d11, d12, d13, d14, d15, d16 = KeyDecimal[8:16]
+    d1, d2= key_decimal[0:2]
 
+    xx = torch.bitwise_xor(d1,d2)
+    
     # Calculate xx and u
-    xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), KeyFeature) / 256
-    u = 3.89 + xx * 0.01
+    for i in range(2,len(key_decimal)//2):
+        xx = torch.bitwise_xor(xx,key_decimal[i])
 
+    x = key_decimal[len(key_decimal)//2]
     # Calculate x
-    x = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d9, d10), d11), d12), d13), d14), d15), d16), KeyFeature) / 256
+    for i in range(len(key_decimal)//2 + 1, len(key_decimal)):
+        x = torch.bitwise_xor(x,key_decimal[i])
 
     # Generate the logistic sequence for the entire image
     len4mn = 4 * n * m
@@ -102,16 +105,20 @@ def permutation_dna(image: torch.Tensor, key_decimal: torch.Tensor, key_feature:
     """
 
     # Extract the key decimal values
-    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0:8]
-    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8:16]
+    d1, d2= key_decimal[0:2]
 
+    xx = torch.bitwise_xor(d1,d2)
+    
     # Calculate xx and u
-    xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), key_feature) / 256
-    # u = 3.89 + xx * 0.01
+    for i in range(2,len(key_decimal)//2, 4):
+        xx = torch.bitwise_xor(xx,key_decimal[i])
 
+    x = key_decimal[len(key_decimal)//2]
     # Calculate x
-    x = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d9, d10), d11), d12), d13), d14), d15), d16), key_feature) / 256
-
+    for i in range(len(key_decimal)//2 + 1, len(key_decimal),4):
+        x = torch.bitwise_xor(x,key_decimal[i])
+        
+        
     len4mn = 4 * n * m
     # torch.manual_seed(x * 10 + u * 100 + key_feature)
     # torch.cuda.manual_seed(x * 100 +  u * 100 + key_feature)
@@ -150,16 +157,20 @@ def diffusion_dna(image: torch.Tensor, key_image: torch.Tensor, key_decimal: tor
         The diffused DNA sequence
     """
     # Extract the key decimal values
-    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0:8]
-    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8:16]
+    d1, d2= key_decimal[0], key_decimal[-1]
 
+    xx = torch.bitwise_xor(d1,d2)
+    
     # Calculate xx and u
-    xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), key_feature) / 256
-    # u = 3.89 + xx * 0.01
+    for i in range(2,len(key_decimal)//2,2):
+        xx = torch.bitwise_xor(xx,key_decimal[i])
 
+    x = key_decimal[len(key_decimal)//2]
     # Calculate x
-    x = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d9, d10), d11), d12), d13), d14), d15), d16), key_feature) / 256
-
+    for i in range(len(key_decimal)//2 + 1, len(key_decimal),2):
+        x = torch.bitwise_xor(x,key_decimal[i])
+        
+        
     len4mn = 4 * n * m
     # torch.manual_seed(x * 10 + u * 100 + key_feature)
     # torch.cuda.manual_seed(x * 100 +  u * 100 + key_feature)
@@ -224,20 +235,18 @@ def decoding_dna_image(m: int, n: int, I: torch.Tensor, key_decimal: torch.Tenso
     """
 
     # Extract the key decimal values
-    d1, d2, d3, d4, d5, d6, d7, d8 = key_decimal[0:8]
-    d9, d10, d11, d12, d13, d14, d15, d16 = key_decimal[8:16]
+    d1, d2= key_decimal[0:2]
 
-
+    xx = torch.bitwise_xor(d1,d2)
+    
     # Calculate xx and u
+    for i in range(2,len(key_decimal)//2):
+        xx = torch.bitwise_xor(xx,key_decimal[i])
 
-    xx = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d1, d2), d3), d4), d5), d6), d7), d8), key_feature) / 256
-    # u = 3.89 + xx * 0.01
-
-
+    x = key_decimal[len(key_decimal)//2]
     # Calculate x
-    x = torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(torch.bitwise_xor(d9, d10), d11), d12), d13), d14), d15), d16), key_feature) / 256
-
-
+    for i in range(len(key_decimal)//2 + 1, len(key_decimal)):
+        x = torch.bitwise_xor(x,key_decimal[i])
 
     # Generate the logistic sequence for the entire image
     len4mn = 4 * n * m
