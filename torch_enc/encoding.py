@@ -127,7 +127,7 @@ def permutation_dna(image: torch.Tensor, key_decimal: torch.Tensor, key_feature:
 
     
     # # Permute the image
-    _, pos = torch.sort(chaotic_signal, dim=0)
+    _, pos = torch.sort(chaotic_signal, dim=0, stable=True)
     _ = None
     pos = pos.int()
     if type == 'encryption':
@@ -312,7 +312,7 @@ def permutation_by_gcd(img:torch.Tensor, key_decimal : torch.Tensor, type : str,
     groupe_size = int(col_size*row_size)
     # rands = torch.rand(size=(1,groupe_size)).to(device=device)
     rands = chaotic_torch_rand(size=(1,groupe_size), seed=seed, r = key_decimal[0] , device=device)
-    _, perm = torch.sort(rands)
+    _, perm = torch.sort(rands, stable=True)
     
     # gcd_rands = torch.rand(size=(2,gcd), device=device)
     # _, gcd_perms = torch.sort(gcd_rands)
@@ -345,7 +345,7 @@ def permutation_rows(img : torch.Tensor, key_decimal : torch.Tensor, type :str, 
 
     rands = chaotic_torch_rand(size=(m,), seed=seed, r = key_decimal[0] , device=device)
 
-    _, perms = rands.squeeze().sort()
+    _, perms = rands.squeeze().sort(stable=True)
     
     if type == 'encryption':
          perm_img = img[perms,:]
@@ -363,7 +363,7 @@ def permutation_columns(img : torch.Tensor, key_decimal : torch.Tensor, type :st
         seed = seed.bitwise_xor(i)
         
     rands = chaotic_torch_rand(size=(n,), seed=seed, r = key_decimal[0] , device=device)
-    _, perms = rands.squeeze().sort()
+    _, perms = rands.squeeze().sort(stable=True)
     
     if type == 'encryption':
          perm_img = img[:,perms]
@@ -381,11 +381,11 @@ def permutation_columns_rows(img : torch.Tensor, key_decimal : torch.Tensor, typ
         
     torch.manual_seed(seedc)
     randc = chaotic_torch_rand(size=(n,), seed=seedc, r = key_decimal[0] , device=device)
-    _, perms_c = randc.squeeze().sort()
+    _, perms_c = randc.squeeze().sort(stable=True)
     
     torch.manual_seed(seedr)
     randr = chaotic_torch_rand(size=(m,), seed=seedr, r = key_decimal[0] , device=device)
-    _, perms_r = randr.squeeze().sort()
+    _, perms_r = randr.squeeze().sort(stable=True)
     
     if type == 'encryption':
          perm_img = img[perms_r,:]#[:,perms_c]

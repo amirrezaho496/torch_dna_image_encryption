@@ -18,7 +18,7 @@ def decrypt_parallel(enc_img : torch.Tensor, key_hex : str,image_hash : str, dev
     key_decimal = hashing.hex_str_to_decimal_tensor(hex_str=key_hash, decimal_len=DECIMAL_LEN, device=device)
     print(f'dec : hash_to_decimal :{time() - t0:.4f}')
     
-    # dec_img = torch.zeros_like(enc_img)
+    dec_img = torch.zeros_like(enc_img)
     
     
     dec_img = permutation_columns_rows(enc_img, key_decimal, 'decryption', device)

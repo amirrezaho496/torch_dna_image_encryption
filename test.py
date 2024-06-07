@@ -1,3 +1,5 @@
+from matplotlib.pyplot import plot, scatter, show
+from sympy import true
 import torch
 
 from randomness.torch_rand import chaotic_torch_rand
@@ -11,13 +13,24 @@ from randomness.torch_rand import chaotic_torch_rand
 # # tens2 = torch.zeros_like(tens)
 # # tens2[:,perm] = tens[:,perm]
 device = "cuda:0"
-rand1 = chaotic_torch_rand(size=(100,), seed=102, r = 10, device='cuda:0')
+rand1 = chaotic_torch_rand(size=(10000000,), seed=102, r = 10, device=device)
 
 device = "cpu"
-rand2 = chaotic_torch_rand(size=(100,), seed=102, r = 10, device='cpu')
+rand2 = chaotic_torch_rand(size=(10000000,), seed=102, r = 10, device=device)
 
-print(rand1)
+sorted1, perm1 = rand2.cuda().sort(stable=True)
+sorted2, perm2 = rand2.sort(stable=True)
+
 print(rand2)
+print(perm2)
+print(rand1.cpu() == rand2)
+print(perm1.cpu() == perm2)
+
+plot((perm1 == perm2.cuda()).cpu())
+# plot(sorted1.cpu())
+# plot(sorted2)
+# plot(sorted1.cpu() == sorted2)
+show()
 
 
 # tensor([0.7713, 0.0208, 0.6336, 0.7488, 0.4985, 0.7034, 0.0810, 0.9257, 0.7501,

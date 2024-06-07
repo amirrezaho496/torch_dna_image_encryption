@@ -23,10 +23,17 @@ def display_images(original_img : torch.Tensor, encrypted_img : torch.Tensor, de
 
     # Display histograms
     max_y_hist = 0
+    histograms = []
     for i, img in enumerate(imgs):
         histogram = torch.histogram(img.reshape(-1).float().cpu(), bins=256)
         hist = histogram.hist
+        histograms.append(hist)
         max_y_hist = max(hist.max().item(), max_y_hist)
+
+        if i == 2 :
+            dif = torch.abs(histograms[0]-histograms[2]).sum()
+            titles[i] += f'\n hist img - hist dec = {dif}'
+            
         # bins = histogram.bin_edges
         axs[1, i].bar(range(0,256), hist.flatten().cpu(), color='gray')
         axs[1, i].set_title(f'Histogram of {titles[i]}')
@@ -155,23 +162,23 @@ def some_bit_change_test(img : torch.Tensor, enc_img : torch.Tensor, key, image_
 
 def main():
     # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    device = 'cuda:0'
-    # device = 'cpu'
+    # device = 'cuda:0'
+    device = 'cpu'
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     # Read the image and convert it to grayscale
     
     ## Open the image file
     # img = Image.open('imgs/12k.jpg').convert('L')
-    img = Image.open('imgs/8k.jpg').convert('L')
-    # img = Image.open('imgs/cat-4k.jpg').convert('L')
+    # img = Image.open('imgs/8k.jpg').convert('L')
+    img = Image.open('imgs/cat-4k.jpg').convert('L')
     # img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
     # img = Image.open('imgs/Lena512.bmp').convert('L')
     
     ## Convert the Image object to a numpy array
     img = np.array(img)
-    img = torch.from_numpy(img).to(device)
-    
+    img = torch.from_numpy(img)
+    img = img.to(dtype=torch.uint8 ,device=device)
     # For making image of any sizes :
     # size = 5_000
     # img = torch.arange(end = size*size, device=device).reshape(size, size)
@@ -185,8 +192,8 @@ def main():
 
     # Set the key and crop parameters
     key = '123456789'
-    chunk_m_step = 3000
-    chunk_n_step = 2000
+    chunk_m_step = 1000
+    chunk_n_step = 1000
     
     itr_num = 1
     enc_times = []
@@ -207,13 +214,13 @@ def main():
     # print(f'Encrypted image saved in <encrypt_img.pt>\n')
 
     print("--------------------------------------------------------------")
-    # device = 'cuda:0'
+    device = 'cuda:0'
     # device = 'cpu'
     # enc_img = torch.load("encrypt_img.pt")
     # print(f'Encrypted image loaded from <encrypt_img.pt>\n')
 
-    enc_img = enc_img.to(device=device)
-    img = img.to(device=device)
+    enc_img = enc_img.to(dtype=torch.uint8 ,device=device)
+    img = img.to(dtype=torch.uint8 ,device=device)
     
     
     dec_times = []

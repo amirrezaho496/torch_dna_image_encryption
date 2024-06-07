@@ -20,18 +20,18 @@ def chaotic_torch_rand(size : Sequence[_int|torch.SymInt], seed = 0, r : torch.u
     # col = int(np.ceil(np.sqrt(count)))
     dim1 = int(np.ceil(np.log2(count)))
     
-    dim2 = count // dim1 + 1
+    dim2 = int(np.ceil(count / dim1))
     
     torch.manual_seed(seed)
-    first_rand= torch.rand(dim2)
+    first_rand= torch.rand(dim2, dtype=torch.float, device='cpu')
     
-    x = torch.zeros(size=(dim1,dim2)).to(device=device)
+    x = torch.zeros(size=(dim1,dim2)).to(device=device, dtype=torch.float)
     
     x[0,:] = first_rand
     # _,perm = first_rand.sort()
     # x[0] = torch.zeros(dim2) + 0.1111
     
-    r = 3.98 + ( r / (256 * 100))
+    r = 3.98 + ( r / (256 * 20))
     for i in range(1,dim1):
         x[i] = r * x[i - 1] * (1 - x[i - 1])
         # x[i, perm] = r * x[i - 1] * (1 - x[i - 1])
