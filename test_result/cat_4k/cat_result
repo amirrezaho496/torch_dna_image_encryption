@@ -1,0 +1,282 @@
+enc : hash_image : 0.0073
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0076
+enc : create_key_image :0.0822
+  encryption : (2000,2000)
+enc : encryption :0.1278
+enc : create_key_image :0.0380
+  encryption : (2000,1840)
+enc : encryption :0.1208
+enc : create_key_image :0.0072
+  encryption : (160,2000)
+enc : encryption :0.0216
+enc : create_key_image :0.0050
+  encryption : (160,1840)
+enc : encryption :0.0138
+Encryption Time = 0.4529
+
+--------------------------------------------------------------
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0003
+dec : create_key_image :0.0427
+  decryption : (2000,2000)
+dec : decryption :0.1804
+dec : create_key_image :0.0337
+  decryption : (2000,1840)
+dec : decryption :0.1290
+dec : create_key_image :0.0091
+  decryption : (160,2000)
+dec : decryption :0.0159
+dec : create_key_image :0.0092
+  decryption : (160,1840)
+dec : decryption :0.0132
+Decryption Time = 0.4407
+
+--------------------------------------------------------------
+last enc times : 0.4529
+avrage enc times : 0.4529
+
+last dec times : 0.4407
+avrage dec times : 0.4407
+--------------------------------------------------------------
+
+Img - dec_img : 0
+UACI : 36.1017, NPCR : 99.6095
+Plain image Entropy     : 7.707580089569092 
+Encrypted image Entropy : 7.999770641326904
+corrcoef : 
+Vertical   : plain image :0.9912, encrypted image : -0.0028
+Horizontal : plain image :0.9909, encrypted image : -0.0067
+Diagonal   : plain image :0.9856, encrypted image : 0.0126
+--------------------------------------------------------------
+
+libGL error: MESA-LOADER: failed to open iris: /usr/lib/dri/iris_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: iris
+libGL error: MESA-LOADER: failed to open iris: /usr/lib/dri/iris_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: iris
+libGL error: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: swrast
+--------------------------------------------------------------
+Cropping attack : 
+
+dec : create_hash_key : 0.0003
+dec : hash_to_decimal :0.0005
+dec : create_key_image :0.0447
+  decryption : (2000,2000)
+dec : decryption :0.1583
+dec : create_key_image :0.0393
+  decryption : (2000,1840)
+dec : decryption :0.1296
+dec : create_key_image :0.0144
+  decryption : (160,2000)
+dec : decryption :0.0127
+dec : create_key_image :0.0055
+  decryption : (160,1840)
+dec : decryption :0.0144
+PSNR decrypt cropped image 1/2.00 : 10.2694 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0349
+  decryption : (2000,2000)
+dec : decryption :0.1418
+dec : create_key_image :0.0442
+  decryption : (2000,1840)
+dec : decryption :0.1263
+dec : create_key_image :0.0085
+  decryption : (160,2000)
+dec : decryption :0.0141
+dec : create_key_image :0.0064
+  decryption : (160,1840)
+dec : decryption :0.0146
+PSNR decrypt cropped image 1/4.00 : 13.3269 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0375
+  decryption : (2000,2000)
+dec : decryption :0.1369
+dec : create_key_image :0.0434
+  decryption : (2000,1840)
+dec : decryption :0.1258
+dec : create_key_image :0.0079
+  decryption : (160,2000)
+dec : decryption :0.0187
+dec : create_key_image :0.0050
+  decryption : (160,1840)
+dec : decryption :0.0150
+PSNR decrypt cropped image 1/8.00 : 16.3658 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0368
+  decryption : (2000,2000)
+dec : decryption :0.1428
+dec : create_key_image :0.0538
+  decryption : (2000,1840)
+dec : decryption :0.1256
+dec : create_key_image :0.0080
+  decryption : (160,2000)
+dec : decryption :0.0111
+dec : create_key_image :0.0061
+  decryption : (160,1840)
+dec : decryption :0.0143
+PSNR decrypt cropped image 1/16.00 : 19.3842 
+dec : create_hash_key : 0.0002
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0364
+  decryption : (2000,2000)
+dec : decryption :0.1376
+dec : create_key_image :0.0373
+  decryption : (2000,1840)
+dec : decryption :0.1430
+dec : create_key_image :0.0083
+  decryption : (160,2000)
+dec : decryption :0.0127
+dec : create_key_image :0.0064
+  decryption : (160,1840)
+dec : decryption :0.0150
+PSNR decrypt cropped image 1/32.00 : 22.4125 
+--------------------------------------------------------------
+Salt and pepper noise attack : 
+
+dec : create_hash_key : 0.0002
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0441
+  decryption : (2000,2000)
+dec : decryption :0.1571
+dec : create_key_image :0.0428
+  decryption : (2000,1840)
+dec : decryption :0.1293
+dec : create_key_image :0.0086
+  decryption : (160,2000)
+dec : decryption :0.0209
+dec : create_key_image :0.0059
+  decryption : (160,1840)
+dec : decryption :0.0130
+PSNR decrypt noisy image 0.100 : 17.4033 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0005
+dec : create_key_image :0.0356
+  decryption : (2000,2000)
+dec : decryption :0.1365
+dec : create_key_image :0.0343
+  decryption : (2000,1840)
+dec : decryption :0.1383
+dec : create_key_image :0.0281
+  decryption : (160,2000)
+dec : decryption :0.0193
+dec : create_key_image :0.0089
+  decryption : (160,1840)
+dec : decryption :0.0162
+PSNR decrypt noisy image 0.050 : 20.4100 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0006
+dec : create_key_image :0.0373
+  decryption : (2000,2000)
+dec : decryption :0.1362
+dec : create_key_image :0.0341
+  decryption : (2000,1840)
+dec : decryption :0.1228
+dec : create_key_image :0.0084
+  decryption : (160,2000)
+dec : decryption :0.0169
+dec : create_key_image :0.0057
+  decryption : (160,1840)
+dec : decryption :0.0141
+PSNR decrypt noisy image 0.005 : 30.3735 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0005
+dec : create_key_image :0.0374
+  decryption : (2000,2000)
+dec : decryption :0.1352
+dec : create_key_image :0.0400
+  decryption : (2000,1840)
+dec : decryption :0.1272
+dec : create_key_image :0.0078
+  decryption : (160,2000)
+dec : decryption :0.0111
+dec : create_key_image :0.0047
+  decryption : (160,1840)
+dec : decryption :0.0107
+PSNR decrypt noisy image 0.001 : 40.5208 
+--------------------------------------------------------------
+Some bit change attack : 
+
+enc : hash_image : 0.0104
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0004
+enc : create_key_image :0.0545
+  encryption : (2000,2000)
+enc : encryption :0.1490
+enc : create_key_image :0.0405
+  encryption : (2000,1840)
+enc : encryption :0.1316
+enc : create_key_image :0.0210
+  encryption : (160,2000)
+enc : encryption :0.0144
+enc : create_key_image :0.0054
+  encryption : (160,1840)
+enc : encryption :0.0129
+1 change image, UACI : 33.3213, NPCR : 99.6062 
+enc : hash_image : 0.0084
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0003
+enc : create_key_image :0.0388
+  encryption : (2000,2000)
+enc : encryption :0.1406
+enc : create_key_image :0.0394
+  encryption : (2000,1840)
+enc : encryption :0.1133
+enc : create_key_image :0.0084
+  encryption : (160,2000)
+enc : encryption :0.0148
+enc : create_key_image :0.0069
+  encryption : (160,1840)
+enc : encryption :0.0141
+2 change image, UACI : 33.3367, NPCR : 99.6108 
+enc : hash_image : 0.0091
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0003
+enc : create_key_image :0.0551
+  encryption : (2000,2000)
+enc : encryption :0.1334
+enc : create_key_image :0.0470
+  encryption : (2000,1840)
+enc : encryption :0.1344
+enc : create_key_image :0.0112
+  encryption : (160,2000)
+enc : encryption :0.0154
+enc : create_key_image :0.0076
+  encryption : (160,1840)
+enc : encryption :0.0220
+4 change image, UACI : 33.3359, NPCR : 99.6089 
+enc : hash_image : 0.0102
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0003
+enc : create_key_image :0.0412
+  encryption : (2000,2000)
+enc : encryption :0.1444
+enc : create_key_image :0.0416
+  encryption : (2000,1840)
+enc : encryption :0.1421
+enc : create_key_image :0.0173
+  encryption : (160,2000)
+enc : encryption :0.0232
+enc : create_key_image :0.0077
+  encryption : (160,1840)
+enc : encryption :0.0165
+8 change image, UACI : 33.3329, NPCR : 99.6110 
+enc : hash_image : 0.0083
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0003
+enc : create_key_image :0.0515
+  encryption : (2000,2000)
+enc : encryption :0.1379
+enc : create_key_image :0.0348
+  encryption : (2000,1840)
+enc : encryption :0.1372
+enc : create_key_image :0.0129
+  encryption : (160,2000)
+enc : encryption :0.0146
+enc : create_key_image :0.0065
+  encryption : (160,1840)
+enc : encryption :0.0137
+16 change image, UACI : 33.3245, NPCR : 99.6078 

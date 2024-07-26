@@ -1,0 +1,198 @@
+enc : hash_image : 0.0005
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0098
+enc : create_key_image :0.0474
+  encryption : (512,512)
+enc : encryption :0.0267
+Encryption Time = 0.1000
+
+enc : hash_image : 0.0004
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0062
+  encryption : (512,512)
+enc : encryption :0.0124
+Encryption Time = 0.0215
+
+enc : hash_image : 0.0003
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0058
+  encryption : (512,512)
+enc : encryption :0.0125
+Encryption Time = 0.0213
+
+enc : hash_image : 0.0003
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0058
+  encryption : (512,512)
+enc : encryption :0.0125
+Encryption Time = 0.0211
+
+enc : hash_image : 0.0003
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0060
+  encryption : (512,512)
+enc : encryption :0.0126
+Encryption Time = 0.0215
+
+--------------------------------------------------------------
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0058
+  decryption : (512,512)
+dec : decryption :0.0428
+Decryption Time = 0.0511
+
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0054
+  decryption : (512,512)
+dec : decryption :0.0125
+Decryption Time = 0.0205
+
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0059
+  decryption : (512,512)
+dec : decryption :0.0126
+Decryption Time = 0.0210
+
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0057
+  decryption : (512,512)
+dec : decryption :0.0129
+Decryption Time = 0.0212
+
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0058
+  decryption : (512,512)
+dec : decryption :0.0124
+Decryption Time = 0.0209
+
+--------------------------------------------------------------
+last enc times : 0.0215
+avrage enc times : 0.0371
+
+last dec times : 0.0209
+avrage dec times : 0.0269
+--------------------------------------------------------------
+
+Img - dec_img : 0
+UACI : 31.2007, NPCR : 99.6284
+Plain image Entropy     : 7.042304992675781 
+Encrypted image Entropy : 7.9992356300354
+corrcoef : 
+Vertical   : plain image :0.9831, encrypted image : 0.0010
+Horizontal : plain image :0.9906, encrypted image : 0.0024
+Diagonal   : plain image :0.9742, encrypted image : 0.0021
+--------------------------------------------------------------
+
+libGL error: MESA-LOADER: failed to open iris: /usr/lib/dri/iris_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: iris
+libGL error: MESA-LOADER: failed to open iris: /usr/lib/dri/iris_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: iris
+libGL error: MESA-LOADER: failed to open swrast: /usr/lib/dri/swrast_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+libGL error: failed to load driver: swrast
+--------------------------------------------------------------
+Cropping attack : 
+
+dec : create_hash_key : 0.0002
+dec : hash_to_decimal :0.0004
+dec : create_key_image :0.0058
+  decryption : (512,512)
+dec : decryption :0.0155
+PSNR decrypt cropped image 1/2.00 : 11.6260 
+dec : create_hash_key : 0.0002
+dec : hash_to_decimal :0.0003
+dec : create_key_image :0.0070
+  decryption : (512,512)
+dec : decryption :0.0154
+PSNR decrypt cropped image 1/4.00 : 14.7042 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0055
+  decryption : (512,512)
+dec : decryption :0.0142
+PSNR decrypt cropped image 1/8.00 : 17.7476 
+dec : create_hash_key : 0.0002
+dec : hash_to_decimal :0.0003
+dec : create_key_image :0.0062
+  decryption : (512,512)
+dec : decryption :0.0131
+PSNR decrypt cropped image 1/16.00 : 20.8027 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0062
+  decryption : (512,512)
+dec : decryption :0.0136
+PSNR decrypt cropped image 1/32.00 : 23.8419 
+--------------------------------------------------------------
+Salt and pepper noise attack : 
+
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0002
+dec : create_key_image :0.0068
+  decryption : (512,512)
+dec : decryption :0.0132
+PSNR decrypt noisy image 0.100 : 18.7943 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0060
+  decryption : (512,512)
+dec : decryption :0.0115
+PSNR decrypt noisy image 0.050 : 21.7837 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0061
+  decryption : (512,512)
+dec : decryption :0.0143
+PSNR decrypt noisy image 0.005 : 32.3288 
+dec : create_hash_key : 0.0001
+dec : hash_to_decimal :0.0001
+dec : create_key_image :0.0057
+  decryption : (512,512)
+dec : decryption :0.0129
+PSNR decrypt noisy image 0.001 : 42.1246 
+--------------------------------------------------------------
+Some bit change attack : 
+
+enc : hash_image : 0.0010
+enc : create_hash_key : 0.0003
+enc : hash_to_decimal :0.0006
+enc : create_key_image :0.0075
+  encryption : (512,512)
+enc : encryption :0.0120
+1 change image, UACI : 33.5635, NPCR : 99.6181 
+enc : hash_image : 0.0004
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0059
+  encryption : (512,512)
+enc : encryption :0.0180
+2 change image, UACI : 33.5682, NPCR : 99.5972 
+enc : hash_image : 0.0003
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0157
+  encryption : (512,512)
+enc : encryption :0.0173
+4 change image, UACI : 33.6362, NPCR : 99.5914 
+enc : hash_image : 0.0006
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0004
+enc : create_key_image :0.0079
+  encryption : (512,512)
+enc : encryption :0.0138
+8 change image, UACI : 33.7010, NPCR : 99.6017 
+enc : hash_image : 0.0003
+enc : create_hash_key : 0.0001
+enc : hash_to_decimal :0.0001
+enc : create_key_image :0.0070
+  encryption : (512,512)
+enc : encryption :0.0151
+16 change image, UACI : 33.6130, NPCR : 99.5987 
