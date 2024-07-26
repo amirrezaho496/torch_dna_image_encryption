@@ -46,7 +46,7 @@ def display_images(original_img : torch.Tensor, encrypted_img : torch.Tensor, de
 
 def cropping_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
     m,n = img.shape
-    ranges = [1.5,2,4,8,16]
+    ranges = [2,4,8,16,32]
     enc_croped_imgs = []
     dec_croped_imgs = []
     titles = []
@@ -84,7 +84,7 @@ def cropping_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash,
 
 def salt_pepper_noise_attack(img : torch.Tensor, enc_img : torch.Tensor, key, image_hash, device, chunk_m_step, chunk_n_step):
     m,n = img.shape
-    ranges = [660,500,250,125,62]
+    ranges = [100,50,5,0.5]
     enc_nsy_imgs = []
     dec_nsy_imgs = []
     titles = []
@@ -106,7 +106,7 @@ def salt_pepper_noise_attack(img : torch.Tensor, enc_img : torch.Tensor, key, im
     
     for i, nsy_img in enumerate(enc_nsy_imgs):
         axs[0, i].imshow(nsy_img.cpu(), cmap='gray')
-        axs[0, i].set_title(f'noise {0.001 * ranges[i]:.3f}')
+        axs[0, i].set_title(f'noise {0.001 * ranges[i]:.4f}')
     for i, dec_nsy_img in enumerate(dec_nsy_imgs):
         axs[1, i].imshow(dec_nsy_img.cpu(), cmap='gray')
         axs[1, i].set_title(titles[i])
@@ -163,7 +163,7 @@ def some_bit_change_test(img : torch.Tensor, enc_img : torch.Tensor, key, image_
 def main():
     # device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     # device = 'cuda:0'
-    device = 'cpu'
+    device = 'cuda:0'
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     # Read the image and convert it to grayscale
@@ -171,9 +171,13 @@ def main():
     ## Open the image file
     # img = Image.open('imgs/12k.jpg').convert('L')
     # img = Image.open('imgs/8k.jpg').convert('L')
-    img = Image.open('imgs/cat-4k.jpg').convert('L')
+    # img = Image.open('imgs/cat-4k.jpg').convert('L')
     # img = Image.open('imgs/pixabay-FHD.jpg').convert('L')
-    # img = Image.open('imgs/Lena512.bmp').convert('L')
+    img = Image.open('imgs/Lena512.bmp').convert('L')
+    # img = Image.open('imgs/Baboon512.bmp').convert('L')
+    # img = Image.open('imgs/Peppers512.bmp').convert('L')
+    # img = Image.open('imgs/Cameraman512.bmp').convert('L')
+    
     
     ## Convert the Image object to a numpy array
     img = np.array(img)
@@ -192,10 +196,10 @@ def main():
 
     # Set the key and crop parameters
     key = '123456789'
-    chunk_m_step = 1000
-    chunk_n_step = 1000
+    chunk_m_step = 2000
+    chunk_n_step = 2000
     
-    itr_num = 1
+    itr_num = 5
     enc_times = []
     for itr in range(itr_num):
         # Encrypt the image
@@ -214,7 +218,7 @@ def main():
     # print(f'Encrypted image saved in <encrypt_img.pt>\n')
 
     print("--------------------------------------------------------------")
-    device = 'cuda:0'
+    # device = 'cuda:0'
     # device = 'cpu'
     # enc_img = torch.load("encrypt_img.pt")
     # print(f'Encrypted image loaded from <encrypt_img.pt>\n')
